@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Campus Hub – ESSEC Events</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #e5f0ff;
+      color: #111827;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1100px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(135deg, #e0f2fe, #ffffff);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 44px;
+      display: block;
+    }
+
+    .logo-tagline {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .header-meta {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    main {
+      padding: 24px;
+    }
+
+    h1, h2, h3 {
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      gap: 6px;
+      transition: transform 0.07s ease, box-shadow 0.07s ease, background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #60a5fa, #2563eb);
+      color: #eff6ff;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-outline:hover {
+      background: #f9fafb;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #e5e7eb;
+    }
+
+    .badge-booked {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #eff6ff;
+    }
+
+    input, select, textarea {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      color: #111827;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 14px;
+      outline: none;
+      width: 100%;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
+    label {
+      font-size: 13px;
+      color: #374151;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .two-cols {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      color: #111827;
+      background: #ffffff;
+    }
+
+    .chip.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #eff6ff;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 14px;
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+
+    .small-text {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 8px 0 12px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #4b5563;
+      font-size: 11px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Auth */
+
+    #auth-screen {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    #auth-form-card {
+      flex: 1;
+    }
+
+    #auth-info-card {
+      flex: 1;
+      font-size: 14px;
+      color: #4b5563;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    #auth-info-card ul {
+      padding-left: 18px;
+    }
+
+    #auth-info-card li {
+      margin-bottom: 6px;
+    }
+
+    /* Tabs */
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      padding: 4px;
+      background: #f9fafb;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #6b7280;
+      border: none;
+      background: transparent;
+      transition: background 0.15s ease, color 0.15s ease, transform 0.07s ease;
+    }
+
+    .tab.active {
+      background: #2563eb;
+      color: #eff6ff;
+      font-weight: 600;
+      transform: translateY(-1px);
+    }
+
+    /* Layout */
+
+    .layout-two {
+      display: grid;
+      grid-template-columns: 2fr;
+      gap: 16px;
+    }
+
+    @media (min-width: 900px) {
+      .layout-two {
+        grid-template-columns: 2.1fr 1.2fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      #auth-screen {
+        flex-direction: column;
+      }
+      main {
+        padding: 18px;
+      }
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-input {
+      max-width: 260px;
+    }
+
+    .filter-inline {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-inline select {
+      max-width: 140px;
+      flex: 0 0 auto;
+    }
+
+    /* Event list & cards */
+
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      max-height: 420px;
+      overflow-y: auto;
+      padding-right: 2px;
+      margin-top: 8px;
+    }
+
+    .event-card {
+      background: #f9fafb;
+      border-radius: 16px;
+      padding: 14px 16px;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: border 0.1s ease, transform 0.07s ease, background 0.1s ease;
+    }
+
+    .event-card:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .event-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .event-status {
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .event-price {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1d4ed8;
+      margin-bottom: 2px;
+    }
+
+    .event-info-lines {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.35;
+    }
+
+    .event-info-line {
+      margin-bottom: 2px;
+    }
+
+    .empty-state {
+      font-size: 13px;
+      color: #9ca3af;
+      padding: 10px 4px;
+    }
+
+    .events-title {
+      margin-top: 4px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    /* User menu */
+
+    #user-indicator {
+      position: relative;
+      min-width: 0;
+    }
+
+    .user-menu-button {
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      padding: 6px 12px;
+      background: #ffffff;
+      font-size: 12px;
+      color: #374151;
+      cursor: pointer;
+    }
+
+    .user-menu-button:hover {
+      background: #f9fafb;
+    }
+
+    .user-menu-dropdown {
+      position: absolute;
+      right: 0;
+      top: 130%;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      padding: 4px 0;
+      z-index: 20;
+      min-width: 140px;
+    }
+
+    .dropdown-item {
+      width: 100%;
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 13px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #374151;
+    }
+
+    .dropdown-item:hover {
+      background: #f3f4f6;
+    }
+
+    /* For you categories */
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .category-card {
+      background: #f9fafb;
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      cursor: pointer;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 500;
+      color: #111827;
+      transition: background 0.1s ease, border 0.1s ease, transform 0.07s ease;
+    }
+
+    .category-card:hover {
+      border-color: #2563eb;
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .link-button {
+      border: none;
+      background: none;
+      padding: 0;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #2563eb;
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+    }
+
+    /* Event detail page */
+
+    #event-detail-page {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .detail-meta {
+      font-size: 13px;
+      color: #4b5563;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+
+    .detail-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .reminder-wrapper {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .reminder-label {
+      font-size: 13px;
+      color: #374151;
+    }
+
+    .reminder-input {
+      width: 70px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="logo">
+      <img src="campushub-logo.png.JPG" alt="Campushub logo" class="logo-img" />
+      <div class="logo-tagline">All campus life events in one place.</div>
+    </div>
+    <div class="header-meta" id="user-indicator">Not signed in</div>
+  </header>
+
+  <main>
+    <!-- AUTH SCREEN -->
+    <section id="auth-screen">
+      <div id="auth-form-card">
+        <h1 style="font-size:20px; margin-bottom:4px;">Welcome</h1>
+        <p class="muted" style="margin-bottom:14px;">Sign in with your school email to see all campus events.</p>
+
+        <form id="auth-form">
+          <div class="field">
+            <label for="email">School email</label>
+            <input id="email" type="email" required placeholder="b00xxxxx@essec.edu" />
+          </div>
+          <div class="field">
+            <label for="role">I am a...</label>
+            <select id="role" required>
+              <option value="student">Student</option>
+              <option value="host">Host / Association</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:6px; width:100%;">
+            Enter Campus Hub
+          </button>
+        </form>
+        <p class="small-text" style="margin-top:10px;">
+          This MVP is front-end only. Authentication and payments would be wired to a backend later.
+        </p>
+      </div>
+
+      <div id="auth-info-card">
+        <h3 style="font-size:15px;">What you can do</h3>
+        <ul>
+          <li>Students explore all campus events and manage their reservations.</li>
+          <li>Hosts create events and see how many students booked them.</li>
+        </ul>
+        <div class="divider"></div>
+        <div>
+          <span class="tag">Included in this prototype</span>
+          <ul style="margin-top:6px;">
+            <li>Explore / For you / Reservations for students</li>
+            <li>Future / Create / Past events for hosts</li>
+            <li>Booking, reminders and cancellation flows</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ONBOARDING (INTERESTS) -->
+    <section id="onboarding" class="hidden">
+      <div class="card">
+        <h2 style="font-size:18px; margin-bottom:6px;">Tell us what you like</h2>
+        <p class="muted" style="margin-bottom:12px;">
+          We’ll use your interests to organize the “For you” section.
+        </p>
+
+        <div class="field">
+          <label>Pick your interests</label>
+          <div class="chips" id="interest-chips">
+            <button type="button" class="chip" data-interest="party">Parties & drinks</button>
+            <button type="button" class="chip" data-interest="career">Career & networking</button>
+            <button type="button" class="chip" data-interest="sport">Sports</button>
+            <button type="button" class="chip" data-interest="culture">Culture & arts</button>
+            <button type="button" class="chip" data-interest="impact">Social impact</button>
+            <button type="button" class="chip" data-interest="academic">Academic talks</button>
+          </div>
+        </div>
+
+        <button id="save-interests-btn" class="btn btn-primary">
+          Save and go to events
+        </button>
+      </div>
+    </section>
+
+    <!-- STUDENT APP -->
+    <section id="student-app" class="hidden">
+      <div class="tabs" id="student-tabs">
+        <button class="tab active" data-tab="explore">Explore</button>
+        <button class="tab" data-tab="for-you">For you</button>
+        <button class="tab" data-tab="reservations">Reservations</button>
+      </div>
+
+      <!-- EXPLORE -->
+      <section id="tab-explore">
+        <div class="card">
+          <div class="small-text" style="font-weight:600; text-transform:uppercase; margin-bottom:4px;">
+            Filters
+          </div>
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <input
+                type="text"
+                id="explore-search"
+                class="search-input"
+                placeholder="Search events or hosts..."
+              />
+              <div class="filter-inline">
+                <select id="explore-filter-category">
+                  <option value="">Categories</option>
+                  <option value="party">Fun</option>
+                  <option value="career">Career</option>
+                  <option value="sport">Sport</option>
+                  <option value="culture">Culture</option>
+                  <option value="impact">Impact</option>
+                  <option value="academic">Academic</option>
+                </select>
+                <select id="explore-filter-host">
+                  <option value="">Hosts</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <h3 class="events-title">Events</h3>
+          <div class="event-list" id="explore-list"></div>
+        </div>
+      </section>
+
+      <!-- FOR YOU -->
+      <section id="tab-for-you" class="hidden">
+        <div class="card">
+          <div id="for-you-categories-view">
+            <h3 style="font-size:16px;">Pick a category</h3>
+            <p class="muted" style="margin-top:4px;">
+              Choose one of the categories you’re interested in to see upcoming events.
+            </p>
+            <div class="category-grid" id="for-you-category-grid"></div>
+          </div>
+
+          <div id="for-you-events-view" class="hidden">
+            <button class="link-button" id="for-you-back-btn">Back to categories</button>
+            <h3 style="font-size:16px;" id="for-you-events-title">Events</h3>
+            <div class="event-list" id="for-you-events-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESERVATIONS -->
+      <section id="tab-reservations" class="hidden">
+        <div class="card">
+          <h3 style="font-size:16px; margin-bottom:4px;">Your reservations</h3>
+          <p class="muted" style="margin-bottom:8px;">
+            All events you booked are listed here.
+          </p>
+          <div class="event-list" id="reservations-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- HOST APP -->
+    <section id="host-app" class="hidden">
+      <div class="tabs" id="host-tabs">
+        <button class="tab active" data-tab="host-future">Future events</button>
+        <button class="tab" data-tab="host-create">Create</button>
+        <button class="tab" data-tab="host-past">Past events</button>
+      </div>
+
+      <!-- HOST FUTURE -->
+      <section id="tab-host-future">
+        <div class="card">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <input id="host-future-search" class="search-input" placeholder="Search your events..." />
+            </div>
+          </div>
+          <h3 class="events-title">Your future events</h3>
+          <div class="event-list" id="host-future-list"></div>
+        </div>
+      </section>
+
+      <!-- HOST CREATE -->
+      <section id="tab-host-create" class="hidden">
+        <div class="card">
+          <h3 style="font-size:16px; margin-bottom:6px;">Create a new event</h3>
+          <p class="muted" style="margin-bottom:12px;">Fill in the basics and publish to all students.</p>
+
+          <form id="host-create-form">
+            <div class="two-cols">
+              <div class="field">
+                <label for="create-title">Title</label>
+                <input id="create-title" required placeholder="ESSEC Finance Society – M&A Workshop" />
+              </div>
+              <div class="field">
+                <label for="create-category">Category</label>
+                <select id="create-category" required>
+                  <option value="">Pick one</option>
+                  <option value="party">Party</option>
+                  <option value="career">Career</option>
+                  <option value="sport">Sport</option>
+                  <option value="culture">Culture</option>
+                  <option value="impact">Social impact</option>
+                  <option value="academic">Academic</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="create-description">Short description</label>
+              <textarea id="create-description" required placeholder="What is the event about? Who should come?"></textarea>
+            </div>
+
+            <div class="two-cols">
+              <div class="field">
+                <label for="create-date">Date</label>
+                <input id="create-date" type="date" required />
+              </div>
+              <div class="field">
+                <label for="create-time">Start time</label>
+                <input id="create-time" type="time" required />
+              </div>
+            </div>
+
+            <div class="two-cols">
+              <div class="field">
+                <label for="create-duration">Duration (minutes)</label>
+                <input id="create-duration" type="number" min="0" placeholder="90" required />
+              </div>
+              <div class="field">
+                <label for="create-location">Location</label>
+                <input id="create-location" placeholder="K-lab, Grand Amphi..." required />
+              </div>
+            </div>
+
+            <div class="two-cols">
+              <div class="field">
+                <label for="create-price">Price (EUR)</label>
+                <input id="create-price" type="number" min="0" step="0.5" placeholder="0 = free" />
+              </div>
+              <div class="field">
+                <label for="create-lydia">Lydia / payment link (optional)</label>
+                <input id="create-lydia" placeholder="https://lydia-app.com/..." />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="create-docs">Additional documents (link)</label>
+              <input id="create-docs" placeholder="Drive, Notion, PDF link..." />
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top:6px;">
+              Publish event
+            </button>
+          </form>
+
+          <p class="small-text" style="margin-top:10px;">
+            In a real version you’d store this in a database and share with all students instantly.
+          </p>
+        </div>
+      </section>
+
+      <!-- HOST PAST -->
+      <section id="tab-host-past" class="hidden">
+        <div class="card">
+          <div class="toolbar">
+            <div class="toolbar-left">
+              <input id="host-past-search" class="search-input" placeholder="Search past events..." />
+            </div>
+          </div>
+          <h3 class="events-title">Your past events</h3>
+          <div class="event-list" id="host-past-list"></div>
+        </div>
+      </section>
+    </section>
+
+    <!-- EVENT DETAIL PAGE (for both students and hosts) -->
+    <section id="event-detail-page" class="hidden">
+      <div class="card">
+        <button class="link-button" id="detail-back-btn">Back</button>
+        <h2 id="detail-page-title" style="font-size:18px;"></h2>
+        <div class="detail-meta" id="detail-page-meta"></div>
+        <p class="muted" id="detail-page-description" style="margin-top:10px;"></p>
+        <div id="detail-page-docs" class="small-text" style="margin-top:8px;"></div>
+        <div class="detail-actions" id="detail-page-actions"></div>
+        <div class="small-text" id="detail-page-extra" style="margin-top:10px;"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // ===== Simple in-memory "database" =====
+  const sampleEvents = [
+    {
+      id: 1,
+      title: "Welcome Party – BDE x Music Club",
+      date: "2025-09-10",
+      time: "21:00",
+      duration: 240,
+      location: "K-Fêt",
+      price: 8,
+      category: "party",
+      host: "BDE ESSEC",
+      description: "Big welcome party for all new and returning students.",
+      docs: "",
+      paymentLink: "https://lydia-app.com/party-bde",
+      createdBy: "system",
+    },
+    {
+      id: 2,
+      title: "Consulting Case Workshop",
+      date: "2025-09-12",
+      time: "18:30",
+      duration: 120,
+      location: "Grand Amphi",
+      price: 0,
+      category: "career",
+      host: "Career Services",
+      description: "Learn how to structure and solve case interviews.",
+      docs: "",
+      paymentLink: "",
+      createdBy: "system",
+    },
+    {
+      id: 3,
+      title: "Basketball Pick-up Games",
+      date: "2025-09-13",
+      time: "16:00",
+      duration: 90,
+      location: "Gymnasium",
+      price: 0,
+      category: "sport",
+      host: "ESSEC Sports Club",
+      description: "Casual basketball games open to all levels.",
+      docs: "",
+      paymentLink: "",
+      createdBy: "system",
+    },
+    {
+      id: 4,
+      title: "Impact Circle – Climate & Finance",
+      date: "2025-09-14",
+      time: "19:00",
+      duration: 120,
+      location: "K-Lab",
+      price: 0,
+      category: "impact",
+      host: "Social Impact Club",
+      description: "Discussion on climate transition and sustainable investing.",
+      docs: "https://example.com/agenda.pdf",
+      paymentLink: "",
+      createdBy: "system",
+    },
+    {
+      id: 5,
+      title: "Movie Night – French Classics",
+      date: "2025-09-15",
+      time: "20:00",
+      duration: 150,
+      location: "Amphi 2",
+      price: 3,
+      category: "culture",
+      host: "Ciné Club",
+      description: "French classic movie followed by a short discussion.",
+      docs: "",
+      paymentLink: "https://lydia-app.com/cine-club",
+      createdBy: "system",
+    }
+  ];
+
+  let user = {
+    email: null,
+    role: null, // 'student' or 'host'
+    interests: [],
+  };
+
+  let events = [...sampleEvents];
+  let reservations = []; // { eventId, reminderMinutes }
+  let currentForYouCategory = null;
+  let detailReturn = null;
+  let selectedDetailEventId = null;
+
+  // ===== Utility helpers =====
+  function formatDate(dateStr) {
+    if (!dateStr) return "";
+    const [y, m, d] = dateStr.split("-");
+    return `${d}/${m}/${y}`;
+  }
+
+  function formatDuration(minutes) {
+    if (!minutes) return "";
+    if (minutes % 60 === 0) return `${minutes / 60}h`;
+    const h = Math.floor(minutes / 60);
+    const min = minutes % 60;
+    return h ? `${h}h${min}` : `${min}min`;
+  }
+
+  function formatPrice(event) {
+    return !event.price || Number(event.price) === 0 ? "Free" : `${event.price}€`;
+  }
+
+  function formatReminderOffset(totalMinutes) {
+    if (!totalMinutes || totalMinutes <= 0) return "No reminder set.";
+    let remaining = totalMinutes;
+    const days = Math.floor(remaining / 1440);
+    remaining %= 1440;
+    const hours = Math.floor(remaining / 60);
+    const mins = remaining % 60;
+    const parts = [];
+    if (days) parts.push(days + (days === 1 ? " day" : " days"));
+    if (hours) parts.push(hours + (hours === 1 ? " hour" : " hours"));
+    if (mins) parts.push(mins + (mins === 1 ? " minute" : " minutes"));
+    const text = parts.join(" ");
+    return text + " before the event.";
+  }
+
+  function findEventById(id) {
+    return events.find(e => e.id === id);
+  }
+
+  function isFree(event) {
+    return !event.price || Number(event.price) === 0;
+  }
+
+  function isEventBooked(eventId) {
+    return reservations.some(r => r.eventId === eventId);
+  }
+
+  // ===== User menu / logout =====
+  const userIndicator = document.getElementById("user-indicator");
+
+  function updateUserMenu() {
+    if (!user.email) {
+      userIndicator.textContent = "Not signed in";
+      return;
+    }
+    userIndicator.innerHTML = `
+      <button class="user-menu-button" id="user-menu-button">${user.email}</button>
+      <div class="user-menu-dropdown hidden" id="user-menu-dropdown">
+        <button class="dropdown-item" id="logout-button">Log out</button>
+      </div>
+    `;
+
+    const menuButton = document.getElementById("user-menu-button");
+    const dropdown = document.getElementById("user-menu-dropdown");
+    const logoutButton = document.getElementById("logout-button");
+
+    menuButton.addEventListener("click", (e) => {
+      e.stopPropagation();
+      dropdown.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.classList.add("hidden");
+    });
+
+    logoutButton.addEventListener("click", () => {
+      handleLogout();
+    });
+  }
+
+  function handleLogout() {
+    user = { email: null, role: null, interests: [] };
+    reservations = [];
+    events = [...sampleEvents];
+    selectedDetailEventId = null;
+    detailReturn = null;
+
+    document.getElementById("auth-screen").classList.remove("hidden");
+    document.getElementById("onboarding").classList.add("hidden");
+    document.getElementById("student-app").classList.add("hidden");
+    document.getElementById("host-app").classList.add("hidden");
+    document.getElementById("event-detail-page").classList.add("hidden");
+
+    updateUserMenu();
+  }
+
+  // ===== AUTH & ONBOARDING =====
+  const authForm = document.getElementById("auth-form");
+  const authScreen = document.getElementById("auth-screen");
+  const onboarding = document.getElementById("onboarding");
+  const studentApp = document.getElementById("student-app");
+  const hostApp = document.getElementById("host-app");
+  const eventDetailPage = document.getElementById("event-detail-page");
+
+  authForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value.trim();
+    const role = document.getElementById("role").value;
+
+    if (!email) return;
+
+    user.email = email;
+    user.role = role;
+
+    updateUserMenu();
+    authScreen.classList.add("hidden");
+
+    if (role === "student") {
+      onboarding.classList.remove("hidden");
+    } else {
+      hostApp.classList.remove("hidden");
+      initHostUI();
+    }
+  });
+
+  // Onboarding interests
+  const interestChips = document.getElementById("interest-chips");
+  const saveInterestsBtn = document.getElementById("save-interests-btn");
+
+  interestChips.addEventListener("click", (e) => {
+    if (e.target.classList.contains("chip")) {
+      e.target.classList.toggle("active");
+    }
+  });
+
+  saveInterestsBtn.addEventListener("click", () => {
+    const activeChips = interestChips.querySelectorAll(".chip.active");
+    user.interests = Array.from(activeChips).map(chip => chip.dataset.interest);
+    onboarding.classList.add("hidden");
+    studentApp.classList.remove("hidden");
+    initStudentUI();
+  });
+
+  // ===== STUDENT UI =====
+  const studentTabs = document.getElementById("student-tabs");
+  const studentTabSections = {
+    "explore": document.getElementById("tab-explore"),
+    "for-you": document.getElementById("tab-for-you"),
+    "reservations": document.getElementById("tab-reservations"),
+  };
+
+  function switchStudentTab(name) {
+    const tabButtons = studentTabs.querySelectorAll(".tab");
+    tabButtons.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.tab === name);
+    });
+
+    Object.entries(studentTabSections).forEach(([key, section]) => {
+      section.classList.toggle("hidden", key !== name);
+    });
+
+    if (name === "explore") {
+      renderExploreList();
+    } else if (name === "for-you") {
+      showForYouCategories();
+    } else if (name === "reservations") {
+      renderReservations();
+    }
+  }
+
+  studentTabs.addEventListener("click", (e) => {
+    if (e.target.classList.contains("tab")) {
+      switchStudentTab(e.target.dataset.tab);
+    }
+  });
+
+  // Explore filters
+  const exploreSearchInput = document.getElementById("explore-search");
+  const exploreCategorySelect = document.getElementById("explore-filter-category");
+  const exploreHostSelect = document.getElementById("explore-filter-host");
+  const exploreList = document.getElementById("explore-list");
+
+  exploreSearchInput.addEventListener("input", renderExploreList);
+  exploreCategorySelect.addEventListener("change", renderExploreList);
+  exploreHostSelect.addEventListener("change", renderExploreList);
+
+  function renderHostOptions() {
+    const uniqueHosts = Array.from(new Set(events.map(e => e.host)));
+    exploreHostSelect.innerHTML = '<option value="">Hosts</option>';
+    uniqueHosts.forEach(host => {
+      const opt = document.createElement("option");
+      opt.value = host;
+      opt.textContent = host;
+      exploreHostSelect.appendChild(opt);
+    });
+  }
+
+  function buildStudentEventCard(event, returnInfo) {
+    const card = document.createElement("div");
+    card.className = "event-card";
+
+    const header = document.createElement("div");
+    header.className = "event-header";
+
+    const left = document.createElement("div");
+    left.innerHTML = `<div class="event-title">${event.title}</div>`;
+
+    const right = document.createElement("div");
+    right.className = "event-status";
+    right.innerHTML = `<div class="event-price">${formatPrice(event)}</div>`;
+    if (isEventBooked(event.id)) {
+      const bookedDiv = document.createElement("div");
+      bookedDiv.innerHTML = `<span class="badge badge-booked">Booked</span>`;
+      right.appendChild(bookedDiv);
+    }
+
+    header.appendChild(left);
+    header.appendChild(right);
+
+    const info = document.createElement("div");
+    info.className = "event-info-lines";
+    info.innerHTML = `
+      <div class="event-info-line"><b>Category:</b> ${event.category} — <b>Host:</b> ${event.host}</div>
+      <div class="event-info-line"><b>Date:</b> ${formatDate(event.date)}</div>
+      <div class="event-info-line"><b>Time:</b> ${event.time}</div>
+      <div class="event-info-line"><b>Duration:</b> ${formatDuration(event.duration)}</div>
+      <div class="event-info-line"><b>Location:</b> 📍 ${event.location}</div>
+    `;
+
+    card.appendChild(header);
+    card.appendChild(info);
+
+    card.addEventListener("click", () => {
+      openEventDetail(event.id, returnInfo);
+    });
+
+    return card;
+  }
+
+  function renderExploreList() {
+    renderHostOptions();
+    const searchTerm = exploreSearchInput.value.trim().toLowerCase();
+    const category = exploreCategorySelect.value;
+    const hostFilter = exploreHostSelect.value;
+
+    const filtered = events
+      .slice()
+      .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
+      .filter(event => {
+        const matchesSearch =
+          !searchTerm ||
+          event.title.toLowerCase().includes(searchTerm) ||
+          event.host.toLowerCase().includes(searchTerm) ||
+          event.description.toLowerCase().includes(searchTerm);
+
+        const matchesCategory = !category || event.category === category;
+        const matchesHost = !hostFilter || event.host === hostFilter;
+
+        return matchesSearch && matchesCategory && matchesHost;
+      });
+
+    exploreList.innerHTML = "";
+
+    if (!filtered.length) {
+      exploreList.innerHTML = '<div class="empty-state">No events match your filters.</div>';
+      return;
+    }
+
+    filtered.forEach(event => {
+      const card = buildStudentEventCard(event, { app: "student", tab: "explore" });
+      exploreList.appendChild(card);
+    });
+  }
+
+  // FOR YOU: categories and events
+  const forYouCategoriesView = document.getElementById("for-you-categories-view");
+  const forYouEventsView = document.getElementById("for-you-events-view");
+  const forYouCategoryGrid = document.getElementById("for-you-category-grid");
+  const forYouBackBtn = document.getElementById("for-you-back-btn");
+  const forYouEventsTitle = document.getElementById("for-you-events-title");
+  const forYouEventsList = document.getElementById("for-you-events-list");
+
+  const categoryLabels = {
+    party: "Parties & drinks",
+    career: "Career & networking",
+    sport: "Sports",
+    culture: "Culture & arts",
+    impact: "Social impact",
+    academic: "Academic talks",
+  };
+
+  function showForYouCategories() {
+    currentForYouCategory = null;
+    forYouCategoriesView.classList.remove("hidden");
+    forYouEventsView.classList.add("hidden");
+    renderForYouCategories();
+  }
+
+  function renderForYouCategories() {
+    forYouCategoryGrid.innerHTML = "";
+
+    let cats = user.interests && user.interests.length
+      ? user.interests
+      : Object.keys(categoryLabels);
+
+    cats.forEach(cat => {
+      const btn = document.createElement("button");
+      btn.className = "category-card";
+      btn.dataset.category = cat;
+      btn.textContent = categoryLabels[cat] || cat;
+      btn.addEventListener("click", () => {
+        openForYouCategory(cat);
+      });
+      forYouCategoryGrid.appendChild(btn);
+    });
+  }
+
+  function openForYouCategory(cat) {
+    currentForYouCategory = cat;
+    forYouCategoriesView.classList.add("hidden");
+    forYouEventsView.classList.remove("hidden");
+    forYouEventsTitle.textContent = categoryLabels[cat] || cat;
+    renderForYouEvents();
+  }
+
+  function renderForYouEvents() {
+    forYouEventsList.innerHTML = "";
+
+    const filtered = events
+      .slice()
+      .filter(e => e.category === currentForYouCategory)
+      .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+
+    if (!filtered.length) {
+      forYouEventsList.innerHTML = '<div class="empty-state">No events in this category yet.</div>';
+      return;
+    }
+
+    filtered.forEach(event => {
+      const card = buildStudentEventCard(event, {
+        app: "student",
+        tab: "for-you",
+        forYouCategory: currentForYouCategory,
+      });
+      forYouEventsList.appendChild(card);
+    });
+  }
+
+  forYouBackBtn.addEventListener("click", () => {
+    showForYouCategories();
+  });
+
+  // Reservations
+  const reservationsList = document.getElementById("reservations-list");
+
+  function renderReservations() {
+    reservationsList.innerHTML = "";
+
+    if (!reservations.length) {
+      reservationsList.innerHTML = `
+        <div class="empty-state">
+          You have no reservations yet. Go to Explore or For you to book events.
+        </div>
+      `;
+      return;
+    }
+
+    reservations.forEach(r => {
+      const event = findEventById(r.eventId);
+      if (!event) return;
+
+      const card = buildStudentEventCard(event, { app: "student", tab: "reservations" });
+      const infoBlock = card.querySelector(".event-info-lines");
+      if (infoBlock) {
+        const reminderLine = document.createElement("div");
+        reminderLine.className = "event-info-line small-text";
+        reminderLine.textContent = r.reminderMinutes
+          ? "Reminder: " + formatReminderOffset(r.reminderMinutes)
+          : "No reminder set.";
+        infoBlock.appendChild(reminderLine);
+      }
+      reservationsList.appendChild(card);
+    });
+  }
+
+  // ===== EVENT DETAIL PAGE =====
+  const detailBackBtn = document.getElementById("detail-back-btn");
+  const detailPageTitle = document.getElementById("detail-page-title");
+  const detailPageMeta = document.getElementById("detail-page-meta");
+  const detailPageDescription = document.getElementById("detail-page-description");
+  const detailPageDocs = document.getElementById("detail-page-docs");
+  const detailPageActions = document.getElementById("detail-page-actions");
+  const detailPageExtra = document.getElementById("detail-page-extra");
+
+  function openEventDetail(eventId, returnInfo) {
+    const event = findEventById(eventId);
+    if (!event) return;
+
+    selectedDetailEventId = eventId;
+    detailReturn = returnInfo || null;
+
+    authScreen.classList.add("hidden");
+    onboarding.classList.add("hidden");
+    studentApp.classList.add("hidden");
+    hostApp.classList.add("hidden");
+    eventDetailPage.classList.remove("hidden");
+
+    renderEventDetail(event);
+  }
+
+  function renderEventDetail(event) {
+    detailPageTitle.textContent = event.title;
+    detailPageMeta.innerHTML = `
+      <div><b>Category:</b> ${event.category} — <b>Host:</b> ${event.host}</div>
+      <div><b>Date:</b> ${formatDate(event.date)}</div>
+      <div><b>Time:</b> ${event.time}</div>
+      <div><b>Duration:</b> ${formatDuration(event.duration)}</div>
+      <div><b>Location:</b> 📍 ${event.location}</div>
+      <div><b>Price:</b> ${formatPrice(event)}</div>
+    `;
+    detailPageDescription.textContent = event.description || "";
+
+    if (event.docs) {
+      detailPageDocs.innerHTML =
+        `Additional documents: <a href="${event.docs}" target="_blank" style="color:#2563eb;">Open link</a>`;
+    } else {
+      detailPageDocs.textContent = "";
+    }
+
+    detailPageActions.innerHTML = "";
+    detailPageExtra.innerHTML = "";
+
+    if (user.role === "student") {
+      const booked = isEventBooked(event.id);
+      let reservation = reservations.find(r => r.eventId === event.id);
+
+      const bookBtn = document.createElement("button");
+      bookBtn.className = "btn btn-primary";
+      bookBtn.textContent = booked ? "Cancel reservation" : "Book this event";
+
+      bookBtn.addEventListener("click", () => {
+        if (booked) {
+          cancelReservation(event.id);
+        } else {
+          handleBookEvent(event.id);
+        }
+        renderEventDetail(event);
+      });
+
+      detailPageActions.appendChild(bookBtn);
+
+      // Manual reminder input: days, hours, minutes
+      const reminderWrapper = document.createElement("div");
+      reminderWrapper.className = "reminder-wrapper";
+
+      const label = document.createElement("span");
+      label.className = "reminder-label";
+      label.textContent = "Reminder (days / hours / minutes before):";
+
+      const daysInput = document.createElement("input");
+      daysInput.type = "number";
+      daysInput.min = "0";
+      daysInput.placeholder = "0";
+      daysInput.className = "reminder-input";
+
+      const hoursInput = document.createElement("input");
+      hoursInput.type = "number";
+      hoursInput.min = "0";
+      hoursInput.placeholder = "0";
+      hoursInput.className = "reminder-input";
+
+      const minutesInput = document.createElement("input");
+      minutesInput.type = "number";
+      minutesInput.min = "0";
+      minutesInput.placeholder = "0";
+      minutesInput.className = "reminder-input";
+
+      if (reservation && reservation.reminderMinutes) {
+        let remaining = reservation.reminderMinutes;
+        const d = Math.floor(remaining / 1440);
+        remaining %= 1440;
+        const h = Math.floor(remaining / 60);
+        const m = remaining % 60;
+        daysInput.value = d || "";
+        hoursInput.value = h || "";
+        minutesInput.value = m || "";
+      }
+
+      const saveBtn = document.createElement("button");
+      saveBtn.className = "btn btn-outline btn-sm";
+      saveBtn.textContent = "Save reminder";
+
+      saveBtn.addEventListener("click", () => {
+        const days = parseInt(daysInput.value || "0", 10);
+        const hours = parseInt(hoursInput.value || "0", 10);
+        const mins = parseInt(minutesInput.value || "0", 10);
+        const total = days * 1440 + hours * 60 + mins;
+
+        if (!total || total <= 0) {
+          updateReminder(event.id, null);
+        } else {
+          updateReminder(event.id, total);
+        }
+        renderEventDetail(event);
+      });
+
+      reminderWrapper.appendChild(label);
+      reminderWrapper.appendChild(daysInput);
+      reminderWrapper.appendChild(hoursInput);
+      reminderWrapper.appendChild(minutesInput);
+      reminderWrapper.appendChild(saveBtn);
+      detailPageActions.appendChild(reminderWrapper);
+
+      reservation = reservations.find(r => r.eventId === event.id);
+      if (reservation && reservation.reminderMinutes) {
+        detailPageExtra.textContent = formatReminderOffset(reservation.reminderMinutes);
+      } else {
+        detailPageExtra.textContent = "No reminder set.";
+      }
+
+      if (!isFree(event) && event.paymentLink) {
+        detailPageExtra.innerHTML +=
+          `<br/><span class="small-text">Payment link (for a real app): <a href="${event.paymentLink}" target="_blank" style="color:#2563eb;">Open Lydia</a></span>`;
+      }
+
+    } else if (user.role === "host") {
+      const bookingsCount = reservations.filter(r => r.eventId === event.id).length;
+      detailPageExtra.innerHTML =
+        `Host view.<br/>Bookings: ${bookingsCount}`;
+    }
+  }
+
+  detailBackBtn.addEventListener("click", () => {
+    eventDetailPage.classList.add("hidden");
+    if (!detailReturn) {
+      if (user.role === "student") {
+        studentApp.classList.remove("hidden");
+        switchStudentTab("explore");
+      } else if (user.role === "host") {
+        hostApp.classList.remove("hidden");
+        switchHostTab("host-future");
+      }
+      return;
+    }
+
+    if (detailReturn.app === "student") {
+      studentApp.classList.remove("hidden");
+      switchStudentTab(detailReturn.tab);
+
+      if (detailReturn.tab === "for-you") {
+        if (detailReturn.forYouCategory) {
+          openForYouCategory(detailReturn.forYouCategory);
+        } else {
+          showForYouCategories();
+        }
+      }
+    } else if (detailReturn.app === "host") {
+      hostApp.classList.remove("hidden");
+      switchHostTab(detailReturn.tab || "host-future");
+    }
+  });
+
+  // Booking / reservations / reminders
+  function handleBookEvent(eventId) {
+    let existing = reservations.find(r => r.eventId === eventId);
+    if (!existing) {
+      existing = { eventId, reminderMinutes: null };
+      reservations.push(existing);
+    }
+    const event = findEventById(eventId);
+    if (!event) return;
+
+    if (!isFree(event) && event.paymentLink) {
+      alert("This event is paid. In a real app, you’d be redirected to a payment page.");
+    } else {
+      alert("Reservation saved for: " + event.title);
+    }
+
+    renderReservations();
+  }
+
+  function cancelReservation(eventId) {
+    reservations = reservations.filter(r => r.eventId !== eventId);
+    alert("Reservation cancelled.");
+    renderReservations();
+  }
+
+  function updateReminder(eventId, minutes) {
+    let reservation = reservations.find(r => r.eventId === eventId);
+    if (!reservation) {
+      reservation = { eventId, reminderMinutes: null };
+      reservations.push(reservation);
+    }
+
+    reservation.reminderMinutes = minutes;
+    if (minutes === null) {
+      alert("Reminder removed.");
+    } else {
+      alert("Reminder set: " + formatReminderOffset(minutes));
+    }
+    renderReservations();
+  }
+
+  // ===== HOST UI =====
+  const hostTabs = document.getElementById("host-tabs");
+  const hostTabSections = {
+    "host-future": document.getElementById("tab-host-future"),
+    "host-create": document.getElementById("tab-host-create"),
+    "host-past": document.getElementById("tab-host-past"),
+  };
+
+  function switchHostTab(name) {
+    const tabButtons = hostTabs.querySelectorAll(".tab");
+    tabButtons.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.tab === name);
+    });
+
+    Object.entries(hostTabSections).forEach(([key, section]) => {
+      section.classList.toggle("hidden", key !== name);
+    });
+
+    if (name === "host-future") {
+      renderHostFutureList();
+    } else if (name === "host-past") {
+      renderHostPastList();
+    }
+  }
+
+  hostTabs.addEventListener("click", (e) => {
+    if (e.target.classList.contains("tab")) {
+      switchHostTab(e.target.dataset.tab);
+    }
+  });
+
+  const hostFutureList = document.getElementById("host-future-list");
+  const hostPastList = document.getElementById("host-past-list");
+  const hostFutureSearch = document.getElementById("host-future-search");
+  const hostPastSearch = document.getElementById("host-past-search");
+
+  hostFutureSearch.addEventListener("input", renderHostFutureList);
+  hostPastSearch.addEventListener("input", renderHostPastList);
+
+  function buildHostCard(event, isFuture) {
+    const card = document.createElement("div");
+    card.className = "event-card";
+
+    const header = document.createElement("div");
+    header.className = "event-header";
+
+    const left = document.createElement("div");
+    left.innerHTML = `<div class="event-title">${event.title}</div>`;
+
+    const right = document.createElement("div");
+    right.className = "event-status";
+    const priceLabel = formatPrice(event);
+    const bookingsCount = reservations.filter(r => r.eventId === event.id).length;
+    right.innerHTML = `
+      <div class="event-price">${priceLabel}</div>
+      <div class="small-text">${isFuture ? "Bookings" : "Booked"}: ${bookingsCount}</div>
+    `;
+
+    header.appendChild(left);
+    header.appendChild(right);
+
+    const info = document.createElement("div");
+    info.className = "event-info-lines";
+    info.innerHTML = `
+      <div class="event-info-line"><b>Category:</b> ${event.category}</div>
+      <div class="event-info-line"><b>Date:</b> ${formatDate(event.date)}</div>
+      <div class="event-info-line"><b>Time:</b> ${event.time}</div>
+      <div class="event-info-line"><b>Duration:</b> ${formatDuration(event.duration)}</div>
+      <div class="event-info-line"><b>Location:</b> 📍 ${event.location}</div>
+    `;
+
+    card.appendChild(header);
+    card.appendChild(info);
+
+    card.addEventListener("click", () => {
+      openEventDetail(event.id, { app: "host", tab: isFuture ? "host-future" : "host-past" });
+    });
+
+    return card;
+  }
+
+  function renderHostFutureList() {
+    hostFutureList.innerHTML = "";
+
+    const term = hostFutureSearch.value.trim().toLowerCase();
+    const myEventsAll = events.filter(e => e.createdBy === user.email);
+    const myEvents = myEventsAll
+      .slice()
+      .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
+      .filter(e =>
+        !term ||
+        e.title.toLowerCase().includes(term) ||
+        e.description.toLowerCase().includes(term)
+      );
+
+    if (!myEvents.length) {
+      hostFutureList.innerHTML =
+        '<div class="empty-state">No events yet. Create one in the “Create” tab.</div>';
+      return;
+    }
+
+    myEvents.forEach(event => {
+      const card = buildHostCard(event, true);
+      hostFutureList.appendChild(card);
+    });
+  }
+
+  function renderHostPastList() {
+    hostPastList.innerHTML = "";
+
+    const term = hostPastSearch.value.trim().toLowerCase();
+    const myEventsAll = events.filter(e => e.createdBy === user.email);
+    const myEvents = myEventsAll
+      .slice()
+      .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))
+      .filter(e =>
+        !term ||
+        e.title.toLowerCase().includes(term) ||
+        e.description.toLowerCase().includes(term)
+      );
+
+    if (!myEvents.length) {
+      hostPastList.innerHTML = '<div class="empty-state">No past events stored yet.</div>';
+      return;
+    }
+
+    myEvents.forEach(event => {
+      const card = buildHostCard(event, false);
+      hostPastList.appendChild(card);
+    });
+  }
+
+  // Host create form
+  const hostCreateForm = document.getElementById("host-create-form");
+  hostCreateForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = document.getElementById("create-title").value.trim();
+    const category = document.getElementById("create-category").value;
+    const description = document.getElementById("create-description").value.trim();
+    const date = document.getElementById("create-date").value;
+    const time = document.getElementById("create-time").value;
+    const duration = Number(document.getElementById("create-duration").value);
+    const location = document.getElementById("create-location").value.trim();
+    const price = Number(document.getElementById("create-price").value || 0);
+    const lydia = document.getElementById("create-lydia").value.trim();
+    const docs = document.getElementById("create-docs").value.trim();
+
+    if (!title || !category || !description || !date || !time || !duration || !location) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    const newEvent = {
+      id: Date.now(),
+      title,
+      category,
+      description,
+      date,
+      time,
+      duration,
+      location,
+      price,
+      host: user.email,          // host shown is the logged-in user
+      paymentLink: lydia,
+      docs,
+      createdBy: user.email,     // used to filter future/past lists
+    };
+
+    events.push(newEvent);
+    hostCreateForm.reset();
+    alert("Event created!");
+    switchHostTab("host-future");
+  });
+
+  // ===== INIT =====
+  function initStudentUI() {
+    renderExploreList();
+    renderReservations();
+    showForYouCategories();
+  }
+
+  function initHostUI() {
+    renderHostFutureList();
+    renderHostPastList();
+  }
+</script>
+</body>
+</html>
