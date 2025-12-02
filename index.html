@@ -1477,6 +1477,15 @@
   // Booking / reservations / reminders
   function handleBookEvent(eventId) {
     let existing = reservations.find(r => r.eventId === eventId);
+
+    // === TRACK BOOK CLICK IN CLOUDFLARE ANALYTICS ===
+    if (typeof cf !== "undefined" && cf.beacon) {
+      cf.beacon({
+        event: "book_click",
+        eventId: eventId,
+        eventTitle: event.title
+      });
+    }
     if (!existing) {
       existing = { eventId, reminderMinutes: null };
       reservations.push(existing);
