@@ -1474,28 +1474,24 @@
     }
   });
 
-  // Booking / reservations / reminders
-  function handleBookEvent(eventId) {
-    let existing = reservations.find(r => r.eventId === eventId);
+    function handleBookEvent(eventId) {
+    const event = findEventById(eventId);
+    if (!event) return;
 
-    // === TRACK BOOK CLICK IN CLOUDFLARE ANALYTICS ===
-    if (typeof cf !== "undefined" && cf.beacon) {
-      cf.beacon({
-        event: "book_click",
-        eventId: eventId,
-        eventTitle: event.title
-      });
-    }
+    // 1) Log the click to Cloudflare (for analytics)
+    fetch("/__log?event=book&id=" + eventId)
+      .catch(() => {});
+
+    // 2) Add to reservations
+    let existing = reservations.find(r => r.eventId === eventId);
     if (!existing) {
       existing = { eventId, reminderMinutes: null };
       reservations.push(existing);
     }
-    const event = findEventById(eventId);
-    if (!event) return;
 
+    // 3) Open the external booking URL
     if (event.paymentLink) {
-      // Redirect to the payment link
-      window.open(event.paymentLink, '_blank');
+      window.open(event.paymentLink, "_blank");
     } else {
       alert("Reservation saved for: " + event.title);
     }
