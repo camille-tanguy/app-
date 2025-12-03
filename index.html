@@ -1371,24 +1371,24 @@ if (user.role === "student") {
 
     bookBtn.addEventListener("click", () => {
 
-        // 1 — Tracking GA4
-        gtag('event', 'book_click', {
-            event_category: 'booking',
-            event_label: event.title,
-            value: event.id
-        });
+  // 1 – Tracking GA4
+  gtag('event', 'book_click', {
+    event_category: 'booking',
+    event_label: event.title,
+    value: event.id,
+    page_location: window.location.href
+  });
 
-        console.log("GA4 event sent: book_click", event.id);
+  console.log("GA4 event sent: book_click", event.id);
 
-        // 2 — Attendre 150 ms avant d’ouvrir le lien
-        setTimeout(() => {
-            handleBookEvent(event.id);
-        }, 150);
-    });
+  // 2 – Attendre 150 ms avant d’ouvrir le lien
+  setTimeout(() => {
+    handleBookEvent(event.id);
+  }, 150);
 
-    detailPageActions.appendChild(bookBtn);
-}
-}
+}); // ← ferme bien le addEventListener
+
+detailPageActions.appendChild(bookBtn); // ← en dehors du listener
 
 
       // Reminder section
