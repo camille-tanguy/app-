@@ -1368,15 +1368,18 @@
 
   bookBtn.addEventListener("click", () => {
 
-    // 1 — Action existante
-    handleBookEvent(event.id);
-
-    // 2 — Tracking Google Analytics (GA4)
+    // 1 — Tracking Google Analytics
     gtag('event', 'book_click', {
-      event_category: 'booking',
-      event_label: event.title,
-      value: event.id
+        event_category: 'booking',
+        event_label: event.title,
+        value: event.id
     });
+
+    // 2 — Attendre 150ms avant d’ouvrir le lien
+    setTimeout(() => {
+        handleBookEvent(event.id);  // UNE seule fois
+    }, 150);
+
 });
 
         detailPageActions.appendChild(bookBtn);
