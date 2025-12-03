@@ -1353,35 +1353,43 @@
     if (user.role === "student") {
       let reservation = reservations.find(r => r.eventId === event.id);
 
-      if (reservation) {
+if (user.role === "student") {
+    let reservation = reservations.find(r => r.eventId === event.id);
+
+    if (reservation) {
         const cancelBtn = document.createElement("button");
         cancelBtn.className = "btn btn-outline btn-sm";
         cancelBtn.textContent = "Cancel booking";
         cancelBtn.addEventListener("click", () => cancelReservation(event.id));
         detailPageActions.appendChild(cancelBtn);
-      } else {
-          const bookBtn = document.createElement("button");
-  bookBtn.className = "btn btn-primary";
-  bookBtn.textContent = "Book";
 
-  bookBtn.addEventListener("click", () => {
+   } else {
 
-    // 1 — Tracking Google Analytics
-    gtag('event', 'book_click', {
-        event_category: 'booking',
-        event_label: event.title,
-        value: event.id
+    const bookBtn = document.createElement("button");
+    bookBtn.className = "btn btn-primary";
+    bookBtn.textContent = "Book";
+
+    bookBtn.addEventListener("click", () => {
+
+        // 1 — Tracking GA4
+        gtag('event', 'book_click', {
+            event_category: 'booking',
+            event_label: event.title,
+            value: event.id
+        });
+
+        console.log("GA4 event sent: book_click", event.id);
+
+        // 2 — Attendre 150 ms avant d’ouvrir le lien
+        setTimeout(() => {
+            handleBookEvent(event.id);
+        }, 150);
     });
 
-    // 2 — Attendre 150ms avant d’ouvrir le lien
-    setTimeout(() => {
-        handleBookEvent(event.id);  // UNE seule fois
-    }, 150);
+    detailPageActions.appendChild(bookBtn);
+}
+}
 
-});
-
-        detailPageActions.appendChild(bookBtn);
-      }
 
       // Reminder section
       const reminderWrapper = document.createElement("div");
